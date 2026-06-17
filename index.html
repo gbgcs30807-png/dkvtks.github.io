@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>앞산공원</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 기본 여백 제거 및 폰트 설정 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow: hidden; /* 스크롤바 숨김 */
+        }
+
+        /* 배경 이미지 및 컨테이너 설정 */
+        .background-container {
+            width: 100vw;
+            height: 100vh;
+            /* 배경 이미지에 약간의 어두운 오버레이를 주어 흰색 글씨가 잘 보이게 함 */
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('image1.jpg') center/cover no-repeat;
+            position: relative;
+        }
+
+        /* 상단 네비게이션 메뉴 */
+        header {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            padding: 30px 60px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: flex-end;
+            z-index: 10;
+        }
+
+        header nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 35px;
+            font-size: 16px;
+            font-weight: 500;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* 텍스트 그림자로 가독성 향상 */
+            transition: color 0.3s;
+        }
+
+        header nav a:hover {
+            color: #ddd;
+        }
+
+        /* 중앙 메인 텍스트 (도심 속 자연 / 앞산공원) */
+        .main-title {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+            width: 100%;
+        }
+
+        .subtitle {
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .title {
+            font-size: 110px;
+            font-weight: 900;
+            margin: 0;
+            letter-spacing: -2px;
+            line-height: 1;
+        }
+
+        /* 하단 곡선 (웨이브) 오버레이 */
+        .bottom-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            z-index: 1;
+        }
+
+        /* 하단 텍스트 정보 (고객센터 등) */
+        .footer-info {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            text-align: center;
+            color: #222222;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.6;
+            z-index: 2;
+        }
+
+        /* 우측 하단 플로팅 버튼 (문의하기) */
+        .fab-button {
+            position: absolute;
+            bottom: 120px;
+            right: 60px;
+            width: 80px;
+            height: 80px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .fab-button:hover {
+            transform: scale(1.05);
+        }
+
+        .fab-icon {
+            font-size: 26px;
+            margin-bottom: 4px;
+        }
+
+        .fab-text {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* 나비 장식 위치 (이모지로 구현) */
+        .butterfly {
+            position: absolute;
+            z-index: 5;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.3));
+        }
+
+        .bt-1 {
+            bottom: 90px;
+            right: 160px;
+            font-size: 45px;
+            transform: rotate(-15deg);
+        }
+
+        .bt-2 {
+            bottom: 40px;
+            right: 90px;
+            font-size: 28px;
+            transform: rotate(20deg);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-container">
+        
+        <header>
+            <nav>
+                <a href="#">명소</a>
+                <a href="#">행사안내</a>
+                <a href="#">편의시설</a>
+                <a href="#">공지사항</a>
+                <a href="#">찾아오시는길</a>
+            </nav>
+        </header>
+
+        <div class="main-title">
+            <div class="subtitle">도심 속 자연</div>
+            <h1 class="title">앞산공원</h1>
+        </div>
+
+        <div class="bottom-wave">
+            <svg viewBox="0 0 1440 200" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+                <path fill="rgba(255, 255, 255, 0.7)" d="M0,96L80,106.7C160,117,320,139,480,128C640,117,800,75,960,64C1120,53,1280,75,1360,85.3L1440,96L1440,200L1360,200C1280,200,1120,200,960,200C800,200,640,200,480,200C320,200,160,200,80,200L0,200Z"></path>
+            </svg>
+        </div>
+
+        <div class="footer-info">
+            고객센터 053-803-7420<br>
+            운영시간 09:00 ~ 18:00
+        </div>
+
+        <a href="#" class="fab-button">
+            <span class="fab-icon">🎧</span>
+            <span class="fab-text">문의하기</span>
+        </a>
+
+        <div class="butterfly bt-1">🦋</div>
+        <div class="butterfly bt-2">🦋</div>
+
+    </div>
+
+</body>
+</html>
