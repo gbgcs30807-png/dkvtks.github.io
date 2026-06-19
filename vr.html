@@ -7,9 +7,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700;900&display=swap" rel="stylesheet">
     
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Noto Sans KR', sans-serif; overflow: hidden; background-color: #000; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            font-family: 'Noto Sans KR', sans-serif; overflow: hidden; 
+            background-color: #000000;
+        }
 
-        /* 진입 시 아래에서 위로 스윽 올라오는 연출 */
+        body {
+            opacity: 0;
+            transform: translateY(100vh); /* 아래쪽 대기 상태 */
+        }
+
         .background-container {
             width: 100vw; height: 100vh;
             background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('image1.jpg') center/cover no-repeat;
@@ -18,20 +26,6 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transform: translateY(100vh);
-            opacity: 0;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
-        }
-
-        .background-container.slide-in {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        /* 홈으로 복귀할 때 내려가는 애니메이션 */
-        .background-container.slide-out-down {
-            transform: translateY(100vh);
-            opacity: 0;
         }
 
         header {
@@ -45,28 +39,37 @@
 
         .vr-container { text-align: center; color: #ffffff; width: 85%; max-width: 1000px; margin-top: 40px; z-index: 5; }
         .vr-title { font-size: 45px; font-weight: 900; margin-bottom: 5px; text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6); letter-spacing: -1px; }
-        
-        .vr-subtitle {
-            font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 25px; font-weight: 300;
-        }
+        .vr-subtitle { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 25px; font-weight: 300; }
 
-        /* [개선] 마우스 드래그를 조작할 VR 화면 프레임 박스 */
+        /* [핵심 교정] 드래그 반응 프레임 레이아웃 */
         .vr-display-frame {
             width: 100%;
             height: 480px;
-            background-color: #b3e5fc; /* 하늘색 바탕 기본 장착 */
-            background-image: url('vr1.jpg');
-            background-size: 300% auto; /* 드래그 공간 확보를 위해 가로배율을 대폭 확장 */
-            background-position: 50% 50%; /* 정중앙 시작 */
+            background-color: #b3e5fc; /* 이미지 로드 전 하늘색 기본 베이스 제공 */
             border-radius: 20px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             border: 4px solid rgba(255, 255, 255, 0.2);
-            cursor: grab; /* 잡을 수 있는 손모양 아이콘 */
-            user-select: none; /* 드래그 시 텍스트나 이미지가 파랗게 블록지정되는 현상 방지 */
+            position: relative;
+            overflow: hidden; /* 영역 밖으로 나가는 큰 이미지 숨김 */
+            cursor: grab;
+        }
+        .vr-display-frame:active { cursor: grabbing; }
+
+        /* 드래그 대상 실제 VR 대형 이미지 */
+        #vrImage {
+            position: absolute;
+            height: 160%; /* 세로 이동폭 확보 */
+            width: auto;  /* 가로 파노라마 비율 자동 확장 */
+            max-width: none; max-height: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            pointer-events: none; /* 프레임의 마우스 트래킹을 방해하지 않음 */
         }
 
-        .vr-display-frame:active {
-            cursor: grabbing; /* 드래그 중 꽉 쥔 손모양 */
+        .vr-overlay {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.6); padding: 8px 20px; border-radius: 30px;
+            font-size: 13px; backdrop-filter: blur(5px); pointer-events: none; color: #fff; z-index: 2;
         }
 
         .fab-button {
@@ -81,10 +84,10 @@
 </head>
 <body>
 
-    <div class="background-container" id="vrContainer">
+    <div class="background-container">
         <header>
             <nav>
-                <a href="#" onclick="returnToMain(event)">홈으로</a>
+                <a href="#" onclick="goBackToMain(event)">홈으로</a>
                 <a href="vr.html" style="color: #ffeb3b;">명소(VR)</a>
                 <a href="#">행사안내</a>
                 <a href="#">편의시설</a>
@@ -93,12 +96,16 @@
             </nav>
         </header>
 
-        <div class="scroll-up-guide">▲ 스크롤을 위로 올리거나 [홈으로]를 누르면 메인 화면으로 복귀합니다</div>
+        <div class="scroll-up-guide">▲ 휠 스크롤을 위로 올리면 메인 화면으로 돌아갑니다</div>
 
         <div class="vr-container">
             <h1 class="vr-title">앞산 풍경 VR</h1>
-            <div class="vr-subtitle">마우스를 클릭한 채 좌우나 상하로 드래그하여 전경을 둘러보세요.</div>
-            <div class="vr-display-frame" id="vrFrame"></div>
+            <div class="vr-subtitle">마우스를 클릭한 채 상하좌우로 드래그하여 전경을 감상해보세요.</div>
+            
+            <div class="vr-display-frame" id="vrFrame">
+                <img src="vr1.jpg" id="vrImage" alt="앞산 VR 풍경">
+                <div class="vr-overlay">🔄 마우스 드래그 지원 영역</div>
+            </div>
         </div>
 
         <a href="inquiry.html" class="fab-button">
@@ -108,103 +115,120 @@
     </div>
 
     <script>
-        const container = document.getElementById('vrContainer');
-        const vrFrame = document.getElementById('vrFrame');
-        let isTransitioning = false;
-
-        // 1. 페이지 로드 시 스욱 올라오는 애니메이션 적용
+        /* 1. 풀페이지 화면 슬라이드 전환 시스템 */
         window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => { container.classList.add('slide-in'); }, 50);
+            setTimeout(() => {
+                document.body.style.transition = 'transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.7s ease';
+                document.body.style.transform = 'translateY(0)';
+                document.body.style.opacity = '1';
+            }, 50);
         });
 
-        // 2. 메인 페이지 복귀 함수
-        function returnToMain(e) {
+        let isTransitioning = false;
+        function goBackToMain(e) {
             if(e) e.preventDefault();
             if (isTransitioning) return;
             isTransitioning = true;
-            container.classList.remove('slide-in');
-            container.classList.add('slide-out-down');
-            setTimeout(() => { window.location.href = 'index.html'; }, 550);
+            
+            sessionStorage.setItem('fromVR', 'true');
+            document.body.style.transform = 'translateY(100vh)';
+            document.body.style.opacity = '0';
+            
+            setTimeout(() => { window.location.href = 'index.html'; }, 700);
         }
 
-        // 역스크롤 감지 (위로 스크롤하면 복귀)
-        window.addEventListener('wheel', function(event) {
-            if (event.deltaY < 0) { returnToMain(); }
+        window.addEventListener('wheel', (e) => {
+            if (e.deltaY < 0) goBackToMain();
         });
 
-        // 모바일 터치 복귀
-        let startTouchY;
-        window.addEventListener('touchstart', function(e) { startTouchY = e.touches[0].pageY; });
-        window.addEventListener('touchmove', function(e) {
+        let startTouchY = 0;
+        window.addEventListener('touchstart', (e) => { startTouchY = e.touches[0].pageY; });
+        window.addEventListener('touchmove', (e) => {
+            if (isTransitioning) return;
             let moveY = e.touches[0].pageY;
-            if (moveY - startTouchY > 40) { returnToMain(); }
+            if (moveY - startTouchY > 60) goBackToMain();
         });
 
 
-        // 3. [핵심] VR 사진 마우스 / 터치 드래그 움직임 구현 로직
+        /* 2. [완벽 교정] 고성능 사방 VR 이미지 마우스 드래그 제어 로직 */
+        const vrFrame = document.getElementById('vrFrame');
+        const vrImage = document.getElementById('vrImage');
+
         let isDragging = false;
         let startX, startY;
-        let bgX = 50; // 초기 배경 X축 위치 (%)
-        let bgY = 50; // 초기 배경 Y축 위치 (%)
+        let imgLeft = 0;
+        let imgTop = 0;
 
-        // 마우스 누를 때
+        // 프레임 중앙 정렬 계산 함수
+        function initImagePosition() {
+            imgLeft = (vrFrame.clientWidth - vrImage.clientWidth) / 2;
+            imgTop = (vrFrame.clientHeight - vrImage.clientHeight) / 2;
+            vrImage.style.left = imgLeft + 'px';
+            vrImage.style.top = imgTop + 'px';
+        }
+
+        vrImage.addEventListener('load', initImagePosition);
+        if (vrImage.complete) initImagePosition();
+        window.addEventListener('resize', initImagePosition);
+
+        // 마우스 이벤트 바인딩
         vrFrame.addEventListener('mousedown', (e) => {
             isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
+            startX = e.clientX - imgLeft;
+            startY = e.clientY - imgTop;
         });
 
-        // 마우스 움직일 때 (사방 패닝 회전 연산)
         window.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
             
-            // 마우스 움직인 거리 계산
-            const deltaX = e.clientX - startX;
-            const deltaY = e.clientY - startY;
-
-            // 기준점 업데이트
-            startX = e.clientX;
-            startY = e.clientY;
-
-            // 이미지가 마우스 드래그 방향에 맞게 시점이 회전하도록 수치 조절 (0.15는 민감도 속도)
-            bgX -= deltaX * 0.15;
-            bgY -= deltaY * 0.15;
-
-            // 화면을 벗어나지 않도록 최소 0% ~ 최대 100% 임계값 고정 처리
-            if (bgX < 0) bgX = 0;
-            if (bgX > 100) bgX = 100;
-            if (bgY < 0) bgY = 0;
-            if (bgY > 100) bgY = 100;
-
-            // 실시간 이미지 좌표 반영
-            vrFrame.style.backgroundPosition = `${bgX}% ${bgY}%`;
+            imgLeft = e.clientX - startX;
+            imgTop = e.clientY - startY;
+            
+            // 경계선(Boundary) 이탈 방지 처리 (흰 여백 노출 방지)
+            const maxLeft = 0;
+            const minLeft = vrFrame.clientWidth - vrImage.clientWidth;
+            const maxTop = 0;
+            const minTop = vrFrame.clientHeight - vrImage.clientHeight;
+            
+            if (imgLeft > maxLeft) imgLeft = maxLeft;
+            if (imgLeft < minLeft) imgLeft = minLeft;
+            if (imgTop > maxTop) imgTop = maxTop;
+            if (imgTop < minTop) imgTop = minTop;
+            
+            vrImage.style.left = imgLeft + 'px';
+            vrImage.style.top = imgTop + 'px';
         });
 
-        // 마우스 뗐을 때 드래그 종료
         window.addEventListener('mouseup', () => { isDragging = false; });
 
-
-        // 모바일 스마트폰/태블릿 터치 드래그 지원 연동
+        // 모바일 터치 드래그 멀티 연동
         vrFrame.addEventListener('touchstart', (e) => {
             isDragging = true;
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
+            startX = e.touches[0].clientX - imgLeft;
+            startY = e.touches[0].clientY - imgTop;
         });
-        window.addEventListener('touchmove', (e) => {
+
+        vrFrame.addEventListener('touchmove', (e) => {
             if (!isDragging) return;
-            const deltaX = e.touches[0].clientX - startX;
-            const deltaY = e.touches[0].clientY - startY;
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
+            e.preventDefault(); // VR 드래그 시 모바일 전체 웹페이지 스크롤 전이 차단
+            
+            imgLeft = e.touches[0].clientX - startX;
+            imgTop = e.touches[0].clientY - startY;
+            
+            const maxLeft = 0;
+            const minLeft = vrFrame.clientWidth - vrImage.clientWidth;
+            const maxTop = 0;
+            const minTop = vrFrame.clientHeight - vrImage.clientHeight;
+            
+            if (imgLeft > maxLeft) imgLeft = maxLeft;
+            if (imgLeft < minLeft) imgLeft = minLeft;
+            if (imgTop > maxTop) imgTop = maxTop;
+            if (imgTop < minTop) imgTop = minTop;
+            
+            vrImage.style.left = imgLeft + 'px';
+            vrImage.style.top = imgTop + 'px';
+        }, { passive: false });
 
-            bgX -= deltaX * 0.15;
-            bgY -= deltaY * 0.15;
-
-            if (bgX < 0) bgX = 0; if (bgX > 100) bgX = 100;
-            if (bgY < 0) bgY = 0; if (bgY > 100) bgY = 100;
-
-            vrFrame.style.backgroundPosition = `${bgX}% ${bgY}%`;
-        });
         window.addEventListener('touchend', () => { isDragging = false; });
     </script>
 </body>
