@@ -11,7 +11,8 @@
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
             font-family: 'Noto Sans KR', sans-serif; 
-            background-color: #1a1a1a;
+            /* 검은색 화면 에러를 막기 위해 기본 바탕을 흰색으로 변경 */
+            background-color: #ffffff;
             overflow: hidden;
             /* 드래그/줌 시 텍스트 파란색 블록 지정 방지 */
             user-select: none;
@@ -37,7 +38,8 @@
 
         /* ==================== 1번 섹션: 메인 화면 스타일 ==================== */
         .background-container {
-            background-color: #2f3e46; 
+            /* 이미지가 없어도 절대 검은색이 되지 않도록 숲 느낌의 녹색 배경을 기본 지정 */
+            background-color: #5a8264; 
             background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('image1.jpg');
             background-size: cover;
             background-position: center;
@@ -83,4 +85,270 @@
         .footer-info {
             position: absolute; bottom: 30px; width: 100%; text-align: center;
             color: #ffffff; font-size: 15px; font-weight: 500; z-index: 2;
-            text-shadow:
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+
+        .fab-button {
+            position: absolute; bottom: 120px; right: 60px; width: 80px; height: 80px;
+            background-color: #ffffff; border-radius: 50%; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-decoration: none; color: #000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); z-index: 10; cursor: pointer;
+        }
+
+        .butterfly { position: absolute; z-index: 5; pointer-events: none; }
+        .bt-1 { bottom: 90px; right: 160px; font-size: 45px; transform: rotate(-15deg); }
+        .bt-2 { bottom: 40px; right: 90px; font-size: 28px; transform: rotate(20deg); }
+
+
+        /* ==================== 2번 섹션: VR 풍경 화면 스타일 ==================== */
+        .vr-container {
+            /* 이미지가 없어도 스크린샷의 하늘색 배경이 유지되도록 확실한 색상 지정 */
+            background-color: #b9d1ea; 
+            background-image: url('vr1.jpg');
+            background-size: auto 100%; 
+            background-position: 50% 50%; 
+            background-repeat: no-repeat;
+            cursor: grab;
+        }
+        .vr-container:active {
+            cursor: grabbing;
+        }
+
+        .vr-container header {
+            background-color: #ffffff;
+            backdrop-filter: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .vr-container header nav a { color: #000000; font-weight: 500; }
+        .vr-container header nav a:hover { color: #666666; }
+
+        .vr-main-title {
+            position: absolute; top: 25%; left: 50%; transform: translate(-50%, -50%);
+            text-align: center; color: #ffffff; width: 100%;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .vr-title { 
+            font-size: 64px; font-weight: 700; margin: 0; letter-spacing: -1px;
+            text-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .vr-guide {
+            position: absolute; bottom: 40px; width: 100%; text-align: center;
+            color: #ffffff; font-size: 15px; font-weight: 500; z-index: 3;
+            text-shadow: 0px 2px 8px rgba(0,0,0,0.4);
+            pointer-events: none;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper" id="mainWrapper">
+        
+        <div class="section background-container">
+            <header>
+                <nav>
+                    <a href="#" onclick="scrollToSection(1, event)">명소(VR)</a>
+                    <a href="#">행사안내</a>
+                    <a href="#">편의시설</a>
+                    <a href="#">공지사항</a>
+                    <a href="#">찾아오시는길</a>
+                </nav>
+            </header>
+            <div class="main-title">
+                <div class="subtitle">도심 속 자연</div>
+                <h1 class="title">앞산공원</h1>
+            </div>
+            <div class="bottom-wave">
+                <svg viewBox="0 0 1440 200" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+                    <path fill="rgba(255, 255, 255, 0.7)" d="M0,96L80,106.7C160,117,320,139,480,128C640,117,800,75,960,64C1120,53,1280,75,1360,85.3L1440,96L1440,200L1360,200C1280,200,1120,200,960,200C800,200,640,200,480,200C320,200,160,200,80,200L0,200Z"></path>
+                </svg>
+            </div>
+            <div class="scroll-guide" onclick="scrollToSection(1, event)">
+                ▼ 스크롤하여 앞산 풍경 VR 보기
+            </div>
+            <div class="footer-info">고객센터 053-803-7420<br>운영시간 09:00 ~ 18:00</div>
+            <a href="inquiry.html" class="fab-button"><span style="font-size:26px">🎧</span><span style="font-size:12px; font-weight:700">문의하기</span></a>
+            <div class="butterfly bt-1">🦋</div>
+            <div class="butterfly bt-2">🦋</div>
+        </div>
+
+        <div class="section vr-container" id="vrSection">
+            <header>
+                <nav>
+                    <a href="#" onclick="scrollToSection(0, event)">명소(VR)</a>
+                    <a href="#">행사안내</a>
+                    <a href="#">편의시설</a>
+                    <a href="#">공지사항</a>
+                    <a href="#">찾아오시는길</a>
+                </nav>
+            </header>
+            <div class="vr-main-title">
+                <h1 class="vr-title">앞산 풍경</h1>
+            </div>
+            <div class="vr-guide">
+                마우스 휠이나 두 손가락으로 확대/축소하고 화면을 드래그해 보세요.<br>
+                (최대 축소 상태에서 위로 스크롤하면 메인으로 돌아갑니다)
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentIdx = 0; // 0: 메인화면, 1: VR화면
+        const wrapper = document.getElementById('mainWrapper');
+        const vrSection = document.getElementById('vrSection');
+        let isTransitioning = false;
+
+        // ==================== 페이지 이동 제어 ====================
+        function scrollToSection(idx, e) {
+            if (e) e.preventDefault();
+            currentIdx = idx;
+            wrapper.style.transform = `translateY(-${currentIdx * 100}vh)`;
+            
+            isTransitioning = true;
+            setTimeout(() => { isTransitioning = false; }, 800);
+        }
+
+        // ==================== VR 줌/팬 상태 변수 ====================
+        let isDragging = false;
+        let startX = 0, startY = 0;
+        
+        let bgSize = 100;    
+        let bgPosX = 50;     
+        let bgPosY = 50;     
+        const dragSpeed = 0.1; 
+
+        // ==================== 마우스 휠 이벤트 (페이지 스크롤 & 줌) ====================
+        window.addEventListener('wheel', (e) => {
+            if (isTransitioning) return;
+
+            if (currentIdx === 0) {
+                if (e.deltaY > 0) scrollToSection(1);
+            } else if (currentIdx === 1) {
+                if (e.deltaY > 0) {
+                    bgSize += 10;
+                    if (bgSize > 400) bgSize = 400; 
+                } else {
+                    bgSize -= 10;
+                    if (bgSize <= 100) {
+                        bgSize = 100;
+                        scrollToSection(0);
+                        return;
+                    }
+                }
+                updateVRStyle();
+            }
+        }, { passive: true });
+
+        // ==================== 마우스 드래그 (상하좌우 이동) ====================
+        vrSection.addEventListener('mousedown', (e) => {
+            if (currentIdx !== 1) return;
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging || currentIdx !== 1) return;
+            
+            const moveX = e.clientX - startX;
+            const moveY = e.clientY - startY;
+            startX = e.clientX;
+            startY = e.clientY;
+
+            // 계산 오류로 인한 검은 화면 방지를 위한 안전장치
+            if (isNaN(bgSize) || bgSize <= 0) bgSize = 100;
+
+            const speedAdjust = 100 / bgSize; 
+            
+            bgPosX = bgPosX - (moveX * dragSpeed * speedAdjust);
+            bgPosY = bgPosY - (moveY * dragSpeed * speedAdjust);
+
+            if (bgPosX < 0) bgPosX = 0; if (bgPosX > 100) bgPosX = 100;
+            if (bgPosY < 0) bgPosY = 0; if (bgPosY > 100) bgPosY = 100;
+
+            updateVRStyle();
+        });
+
+        window.addEventListener('mouseup', () => { isDragging = false; });
+        window.addEventListener('mouseleave', () => { isDragging = false; });
+
+        // ==================== 모바일 터치 제어 (팬 & 핀치 줌 & 스와이프) ====================
+        let touchDist = 0;
+        let initialTouchY = 0;
+
+        window.addEventListener('touchstart', (e) => {
+            if (currentIdx !== 1) {
+                initialTouchY = e.touches[0].clientY;
+                return;
+            }
+            
+            if (e.touches.length === 1) {
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                initialTouchY = e.touches[0].clientY; 
+            } else if (e.touches.length === 2) {
+                isDragging = false;
+                touchDist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            if (currentIdx !== 1) return;
+
+            if (e.touches.length === 1 && isDragging) {
+                const moveX = e.touches[0].clientX - startX;
+                const moveY = e.touches[0].clientY - startY;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+
+                if (isNaN(bgSize) || bgSize <= 0) bgSize = 100;
+                
+                const speedAdjust = 100 / bgSize; 
+                bgPosX = bgPosX - (moveX * dragSpeed * speedAdjust);
+                bgPosY = bgPosY - (moveY * dragSpeed * speedAdjust);
+
+                if (bgPosX < 0) bgPosX = 0; if (bgPosX > 100) bgPosX = 100;
+                if (bgPosY < 0) bgPosY = 0; if (bgPosY > 100) bgPosY = 100;
+                
+                updateVRStyle();
+
+            } else if (e.touches.length === 2) {
+                const newDist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                
+                if (touchDist > 0) {
+                    const diff = newDist - touchDist;
+                    bgSize += diff * 0.3; 
+                    
+                    if (bgSize > 400) bgSize = 400;
+                    if (bgSize < 100) bgSize = 100;
+                    updateVRStyle();
+                }
+                touchDist = newDist;
+            }
+        }, { passive: true });
+        
+        window.addEventListener('touchend', (e) => {
+            if (e.touches.length === 0) {
+                isDragging = false;
+                touchDist = 0;
+            }
+            
+            if (isTransitioning) return;
+
+            let touchEndY = e.changedTouches[0].clientY;
+
+            if (currentIdx === 0 && initialTouchY) {
+                if (initialTouchY - touchEndY > 60) scrollToSection(1);
+            } 
+            else if (currentIdx === 1 && bgSize === 100 && initialTouchY) {
