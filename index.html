@@ -7,46 +7,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700;900&display=swap" rel="stylesheet">
     
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Noto Sans KR', sans-serif; overflow: hidden; }
+        /* [개선] 부드러운 전체 화면 슬라이딩 전환을 위한 기본 초기화 */
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            font-family: 'Noto Sans KR', sans-serif; overflow: hidden; 
+            background-color: #000000;
+        }
 
-        /* [개선] 부드러운 화면 전환을 위한 트랜션 설정 */
+        body {
+            opacity: 0; /* 첫 진입 시 부드러운 등장을 위한 기본값 */
+            transform: translateY(0);
+        }
+
         .background-container {
             width: 100vw; height: 100vh;
             background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('image1.jpg') center/cover no-repeat;
             position: relative;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
-            top: 0;
-        }
-
-        /* 다음 페이지로 넘어갈 때 위로 스윽 올라가는 효과 */
-        .background-container.slide-out {
-            transform: translateY(-100vh);
-            opacity: 0;
         }
 
         header {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            padding: 30px 60px;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: flex-end;
-            z-index: 10;
-            background-color: rgba(0, 0, 0, 0.4); 
-            backdrop-filter: blur(2px);
+            position: absolute; top: 0; right: 0; width: 100%; padding: 30px 60px;
+            box-sizing: border-box; display: flex; justify-content: flex-end; z-index: 10;
+            background-color: rgba(0, 0, 0, 0.4); backdrop-filter: blur(2px);
         }
 
         header nav a {
-            color: #ffffff;
-            text-decoration: none;
-            margin-left: 35px;
-            font-size: 16px;
-            font-weight: 500;
-            transition: color 0.3s;
+            color: #ffffff; text-decoration: none; margin-left: 35px;
+            font-size: 16px; font-weight: 500; transition: color 0.3s;
         }
-
         header nav a:hover { color: #ddd; }
 
         .main-title {
@@ -59,7 +47,7 @@
 
         .bottom-wave { position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; z-index: 1; }
 
-        /* 스크롤 유도 부드러운 바운스 애니메이션 */
+        /* 부드럽게 통통 튀는 스크롤 안내 문구 */
         .scroll-guide {
             position: absolute; bottom: 85px; width: 100%; text-align: center;
             color: #333333; font-size: 14px; font-weight: 700; z-index: 2;
@@ -85,4 +73,63 @@
 
         .butterfly { position: absolute; z-index: 5; }
         .bt-1 { bottom: 90px; right: 160px; font-size: 45px; transform: rotate(-15deg); }
-        .bt-2 { bottom: 40px; right: 90px; font-size: 28px; transform: rotate
+        .bt-2 { bottom: 40px; right: 90px; font-size: 28px; transform: rotate(20deg); }
+    </style>
+</head>
+<body>
+
+    <div class="background-container">
+        <header>
+            <nav>
+                <a href="#" onclick="goToVR(event)">명소(VR)</a>
+                <a href="#">행사안내</a>
+                <a href="#">편의시설</a>
+                <a href="#">공지사항</a>
+                <a href="#">찾아오시는길</a>
+            </nav>
+        </header>
+
+        <div class="main-title">
+            <div class="subtitle">도심 속 자연</div>
+            <h1 class="title">앞산공원</h1>
+        </div>
+
+        <div class="bottom-wave">
+            <svg viewBox="0 0 1440 200" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+                <path fill="rgba(255, 255, 255, 0.7)" d="M0,96L80,106.7C160,117,320,139,480,128C640,117,800,75,960,64C1120,53,1280,75,1360,85.3L1440,96L1440,200L1360,200C1280,200,1120,200,960,200C800,200,640,200,480,200C320,200,160,200,80,200L0,200Z"></path>
+            </svg>
+        </div>
+
+        <div class="scroll-guide" onclick="goToVR(event)">
+            ▼ 스크롤하여 앞산 풍경 VR 보기
+        </div>
+
+        <div class="footer-info">
+            고객센터 053-803-7420<br>
+            운영시간 09:00 ~ 18:00
+        </div>
+
+        <a href="inquiry.html" class="fab-button">
+            <span style="font-size:26px">🎧</span>
+            <span style="font-size:12px; font-weight:700">문의하기</span>
+        </a>
+
+        <div class="butterfly bt-1">🦋</div>
+        <div class="butterfly bt-2">🦋</div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // VR페이지에서 위로 스크롤하여 돌아온 경우 상단에서 스윽 내려오도록 연출
+            if (sessionStorage.getItem('fromVR') === 'true') {
+                document.body.style.transform = 'translateY(-100vh)';
+                sessionStorage.removeItem('fromVR');
+            }
+            setTimeout(() => {
+                document.body.style.transition = 'transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.7s ease';
+                document.body.style.transform = 'translateY(0)';
+                document.body.style.opacity = '1';
+            }, 50);
+        });
+
+        let isTransitioning = false;
