@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문의하기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('image1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 30px 50px;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: flex-end;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }
+
+        /* 문의하기 메뉴 활성화 표시 */
+        nav ul li a.active {
+            color: #ffeb3b;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 50px;
+        }
+
+        .page-title {
+            color: white;
+            font-size: 45px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+        }
+
+        .form-container {
+            background-color: white;
+            width: 80%;
+            max-width: 900px;
+            border-radius: 15px;
+            padding: 60px 50px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            display: flex;
+            margin-bottom: 40px;
+        }
+        
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            width: 150px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #000;
+            padding-top: 25px;
+        }
+
+        .input-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .helper-text {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 8px;
+            margin-left: 5px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #999;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            border-color: #333;
+        }
+
+        textarea {
+            height: 250px;
+            resize: vertical;
+            margin-top: 15px;
+        }
+
+        /* 작성 완료 버튼 추가 (선택 사항) */
+        .submit-box {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .btn-submit {
+            padding: 12px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-submit:hover {
+            background-color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .form-group {
+                flex-direction: column;
+            }
+            .form-label {
+                padding-top: 0;
+                margin-bottom: 10px;
+            }
+            nav ul {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">홈</a></li>
+                <li><a href="#">명소</a></li>
+                <li><a href="#">행사안내</a></li>
+                <li><a href="#">편의시설</a></li>
+                <li><a href="#">공지사항</a></li>
+                <li><a href="#">찾아오시는길</a></li>
+                <li><a href="inquiry.html" class="active">문의하기</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="page-title">문의하기</h1>
+
+        <div class="form-container">
+            <form action="#" method="post">
+                
+                <div class="form-group">
+                    <div class="form-label">문의 유형</div>
+                    <div class="input-area">
+                        <span class="helper-text">※ 최대 20자까지 작성 가능</span>
+                        <input type="text" maxlength="20">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-label">문의 제목</div>
+                    <div class="input-area">
+                        <span class="helper-text">※ 최대 50자까지 작성 가능</span>
+                        <input type="text" maxlength="50">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-label">문의 내용</div>
+                    <div class="input-area">
+                        <textarea></textarea>
+                    </div>
+                </div>
+                
+                <div class="submit-box">
+                    <button type="submit" class="btn-submit">작성 완료</button>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+</body>
+</html>
