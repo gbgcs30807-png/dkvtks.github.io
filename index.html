@@ -10,19 +10,31 @@
         /* [개선] 부드러운 전체 화면 슬라이딩 전환을 위한 기본 초기화 */
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            font-family: 'Noto Sans KR', sans-serif; overflow: hidden; 
+            font-family: 'Noto Sans KR', sans-serif; 
             background-color: #000000;
+            /* 원페이지 자연스러운 전환을 위해 기본 스크롤바 숨김 */
+            overflow: hidden;
         }
 
-        body {
-            opacity: 0; /* 첫 진입 시 부드러운 등장을 위한 기본값 */
-            transform: translateY(0);
-        }
-
-        .background-container {
-            width: 100vw; height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('image1.jpg') center/cover no-repeat;
+        /* 두 개의 화면(메인, VR)을 통째로 움직여줄 컨테이너 */
+        .wrapper {
+            width: 100%;
+            height: 200vh; /* 100vh짜리 섹션 2개이므로 총 200vh */
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
             position: relative;
+        }
+
+        /* 각 섹션 공통 스타일 (화면 하나를 가득 채움) */
+        .section {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* ==================== 1번 섹션: 메인 화면 스타일 ==================== */
+        .background-container {
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('image1.jpg') center/cover no-repeat;
         }
 
         header {
@@ -73,63 +85,4 @@
 
         .butterfly { position: absolute; z-index: 5; }
         .bt-1 { bottom: 90px; right: 160px; font-size: 45px; transform: rotate(-15deg); }
-        .bt-2 { bottom: 40px; right: 90px; font-size: 28px; transform: rotate(20deg); }
-    </style>
-</head>
-<body>
-
-    <div class="background-container">
-        <header>
-            <nav>
-                <a href="#" onclick="goToVR(event)">명소(VR)</a>
-                <a href="#">행사안내</a>
-                <a href="#">편의시설</a>
-                <a href="#">공지사항</a>
-                <a href="#">찾아오시는길</a>
-            </nav>
-        </header>
-
-        <div class="main-title">
-            <div class="subtitle">도심 속 자연</div>
-            <h1 class="title">앞산공원</h1>
-        </div>
-
-        <div class="bottom-wave">
-            <svg viewBox="0 0 1440 200" preserveAspectRatio="none" style="width: 100%; height: 100%;">
-                <path fill="rgba(255, 255, 255, 0.7)" d="M0,96L80,106.7C160,117,320,139,480,128C640,117,800,75,960,64C1120,53,1280,75,1360,85.3L1440,96L1440,200L1360,200C1280,200,1120,200,960,200C800,200,640,200,480,200C320,200,160,200,80,200L0,200Z"></path>
-            </svg>
-        </div>
-
-        <div class="scroll-guide" onclick="goToVR(event)">
-            ▼ 스크롤하여 앞산 풍경 VR 보기
-        </div>
-
-        <div class="footer-info">
-            고객센터 053-803-7420<br>
-            운영시간 09:00 ~ 18:00
-        </div>
-
-        <a href="inquiry.html" class="fab-button">
-            <span style="font-size:26px">🎧</span>
-            <span style="font-size:12px; font-weight:700">문의하기</span>
-        </a>
-
-        <div class="butterfly bt-1">🦋</div>
-        <div class="butterfly bt-2">🦋</div>
-    </div>
-
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            // VR페이지에서 위로 스크롤하여 돌아온 경우 상단에서 스윽 내려오도록 연출
-            if (sessionStorage.getItem('fromVR') === 'true') {
-                document.body.style.transform = 'translateY(-100vh)';
-                sessionStorage.removeItem('fromVR');
-            }
-            setTimeout(() => {
-                document.body.style.transition = 'transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.7s ease';
-                document.body.style.transform = 'translateY(0)';
-                document.body.style.opacity = '1';
-            }, 50);
-        });
-
-        let isTransitioning = false;
+        .bt
