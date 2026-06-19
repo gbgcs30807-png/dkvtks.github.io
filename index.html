@@ -1,130 +1,39 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>메인 홈</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
-        }
+<a href="inquiry.html" class="floating-inquiry-btn" title="문의하기">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path fill-rule="evenodd" d="M4.848 2.771A49.144 49.144 0 0 1 12 2.25c2.43 0 4.817.178 7.152.52 1.578.23 2.848 1.51 2.848 3.13a48.56 48.56 0 0 1-.003 5.18c0 1.62-1.27 2.9-2.847 3.13a49.11 49.11 0 0 1-5.183.407l-3.064 2.522A1 1 0 0 1 10 16.347V14.5a49.055 49.055 0 0 1-5.152-.424C3.27 13.845 2 12.565 2 10.944a48.454 48.454 0 0 1-.003-5.18c0-1.62 1.27-2.9 2.851-3.13ZM12 6a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 12 6Zm0 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+    </svg>
+</a>
 
-        body {
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('image1.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+<style>
+    /* 기존 레이아웃을 방해하지 않고 우측 하단에 고정되는 아이콘 스타일 */
+    .floating-inquiry-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background-color: #ffffff; /* 하얀색 원형 버튼 */
+        color: #333333;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        z-index: 9999; /* 다른 요소보다 항상 위에 있도록 설정 */
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        text-decoration: none;
+    }
 
-        header {
-            padding: 30px 50px;
-        }
+    /* 아이콘 크기 조절 */
+    .floating-inquiry-btn svg {
+        width: 32px;
+        height: 32px;
+    }
 
-        nav ul {
-            display: flex;
-            justify-content: flex-end;
-            list-style: none;
-            gap: 30px;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: bold;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-        }
-        
-        /* 현재 페이지 또는 강조하고 싶은 메뉴 스타일 */
-        nav ul li a.active {
-            color: #ffeb3b; 
-        }
-
-        /* 메인 화면 중앙 콘텐츠 */
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .main-title {
-            font-size: 50px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
-        }
-
-        .main-subtitle {
-            font-size: 20px;
-            margin-bottom: 40px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-        }
-
-        /* 문의하기 페이지로 이동하는 버튼 */
-        .btn-inquiry {
-            display: inline-block;
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #fff;
-            background-color: rgba(255, 255, 255, 0.2);
-            border: 2px solid #fff;
-            border-radius: 30px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-        }
-
-        .btn-inquiry:hover {
-            background-color: #fff;
-            color: #000;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        @media (max-width: 768px) {
-            nav ul {
-                justify-content: center;
-                flex-wrap: wrap;
-                gap: 15px;
-            }
-            .main-title { font-size: 35px; }
-            .main-subtitle { font-size: 16px; }
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">홈</a></li>
-                <li><a href="#">명소</a></li>
-                <li><a href="#">행사안내</a></li>
-                <li><a href="#">편의시설</a></li>
-                <li><a href="#">공지사항</a></li>
-                <li><a href="#">찾아오시는길</a></li>
-                <li><a href="inquiry.html">문의하기</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <h1 class="main-title">자연과 함께하는 힐링 공간</h1>
-        <p class="main-subtitle">방문해주셔서 감사합니다. 궁금하신 점은 언제든 물어보세요.</p>
-        <a href="inquiry.html" class="btn-inquiry">문의하기 바로가기</a>
-    </main>
-
-</body>
-</html>
+    /* 마우스를 올렸을 때 살짝 커지는 효과 */
+    .floating-inquiry-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        background-color: #f5f5f5;
+    }
+</style>
