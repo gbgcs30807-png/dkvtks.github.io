@@ -3,107 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>앞산공원</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700;900&display=swap" rel="stylesheet">
-    
+    <title>메인 홈</title>
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Noto Sans KR', sans-serif; overflow: hidden; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+        }
 
-        .background-container {
-            width: 100vw; height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('image1.jpg') center/cover no-repeat;
-            position: relative;
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('image1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         header {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            padding: 30px 60px;
-            box-sizing: border-box;
+            padding: 30px 50px;
+        }
+
+        nav ul {
             display: flex;
             justify-content: flex-end;
-            z-index: 10;
-            /* 가독성 향상을 위한 반투명 배경 띠 추가 */
-            background-color: rgba(0, 0, 0, 0.4); 
-            backdrop-filter: blur(2px);
+            list-style: none;
+            gap: 30px;
         }
 
-        header nav a {
-            color: #ffffff;
+        nav ul li a {
+            color: white;
             text-decoration: none;
-            margin-left: 35px;
             font-size: 16px;
-            font-weight: 500;
-            transition: color 0.3s;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }
+        
+        /* 현재 페이지 또는 강조하고 싶은 메뉴 스타일 */
+        nav ul li a.active {
+            color: #ffeb3b; 
         }
 
-        header nav a:hover { color: #ddd; }
+        /* 메인 화면 중앙 콘텐츠 */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
 
         .main-title {
-            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
-            text-align: center; color: #ffffff; text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6); width: 100%;
+            font-size: 50px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
         }
 
-        .subtitle { font-size: 28px; font-weight: 300; margin-bottom: 15px; letter-spacing: 2px; }
-        .title { font-size: 110px; font-weight: 900; margin: 0; letter-spacing: -2px; line-height: 1; }
-
-        .bottom-wave { position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; z-index: 1; }
-
-        .footer-info {
-            position: absolute; bottom: 30px; width: 100%; text-align: center;
-            color: #222222; font-size: 15px; font-weight: 500; z-index: 2;
+        .main-subtitle {
+            font-size: 20px;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
         }
 
-        .fab-button {
-            position: absolute; bottom: 120px; right: 60px; width: 80px; height: 80px;
-            background-color: #ffffff; border-radius: 50%; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; text-decoration: none; color: #000;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); z-index: 10; cursor: pointer;
+        /* 문의하기 페이지로 이동하는 버튼 */
+        .btn-inquiry {
+            display: inline-block;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px solid #fff;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
         }
 
-        .butterfly { position: absolute; z-index: 5; }
-        .bt-1 { bottom: 90px; right: 160px; font-size: 45px; transform: rotate(-15deg); }
-        .bt-2 { bottom: 40px; right: 90px; font-size: 28px; transform: rotate(20deg); }
+        .btn-inquiry:hover {
+            background-color: #fff;
+            color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            .main-title { font-size: 35px; }
+            .main-subtitle { font-size: 16px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="background-container">
-        <header>
-            <nav>
-                <a href="#">명소</a>
-                <a href="#">행사안내</a>
-                <a href="#">편의시설</a>
-                <a href="#">공지사항</a>
-                <a href="#">찾아오시는길</a>
-            </nav>
-        </header>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">홈</a></li>
+                <li><a href="#">명소</a></li>
+                <li><a href="#">행사안내</a></li>
+                <li><a href="#">편의시설</a></li>
+                <li><a href="#">공지사항</a></li>
+                <li><a href="#">찾아오시는길</a></li>
+                <li><a href="inquiry.html">문의하기</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        <div class="main-title">
-            <div class="subtitle">도심 속 자연</div>
-            <h1 class="title">앞산공원</h1>
-        </div>
+    <main>
+        <h1 class="main-title">자연과 함께하는 힐링 공간</h1>
+        <p class="main-subtitle">방문해주셔서 감사합니다. 궁금하신 점은 언제든 물어보세요.</p>
+        <a href="inquiry.html" class="btn-inquiry">문의하기 바로가기</a>
+    </main>
 
-        <div class="bottom-wave">
-            <svg viewBox="0 0 1440 200" preserveAspectRatio="none" style="width: 100%; height: 100%;">
-                <path fill="rgba(255, 255, 255, 0.7)" d="M0,96L80,106.7C160,117,320,139,480,128C640,117,800,75,960,64C1120,53,1280,75,1360,85.3L1440,96L1440,200L1360,200C1280,200,1120,200,960,200C800,200,640,200,480,200C320,200,160,200,80,200L0,200Z"></path>
-            </svg>
-        </div>
-
-        <div class="footer-info">
-            고객센터 053-803-7420<br>
-            운영시간 09:00 ~ 18:00
-        </div>
-
-        <a href="#" class="fab-button">
-            <span style="font-size:26px">🎧</span>
-            <span style="font-size:12px; font-weight:700">문의하기</span>
-        </a>
-
-        <div class="butterfly bt-1">🦋</div>
-        <div class="butterfly bt-2">🦋</div>
-    </div>
 </body>
 </html>
