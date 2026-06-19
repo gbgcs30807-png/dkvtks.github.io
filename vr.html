@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>앞산 풍경 VR - 앞산공원</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 1. 기본 초기화 및 메인 페이지 스타일 통일 */
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100%; 
+            font-family: 'Noto Sans KR', sans-serif; 
+            overflow-x: hidden;
+            background-color: #111111; /* VR 몰입감을 위해 어두운 배경 선택 */
+        }
+
+        /* 전체 배경 컨테이너 (메인 페이지의 image1.jpg를 어둡고 투명하게 활용) */
+        .background-container {
+            width: 100%; 
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('image1.jpg') center/cover no-repeat fixed;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 2. 상단 헤더 (메인 페이지 레이아웃 그대로 유지) */
+        header {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            padding: 30px 60px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: flex-end;
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.4); 
+            backdrop-filter: blur(2px);
+        }
+
+        header nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 35px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        header nav a:hover { color: #ddd; }
+
+        /* 3. VR 페이지 콘텐츠 영역 */
+        .vr-content {
+            margin-top: 140px; /* 헤더 공간 확보 */
+            width: 90%;
+            max-width: 1200px;
+            text-align: center;
+            color: #ffffff;
+            z-index: 2;
+            padding-bottom: 60px;
+        }
+
+        .vr-subtitle {
+            font-size: 20px;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+            color: #e0e0e0;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+        }
+
+        .vr-title {
+            font-size: 45px;
+            font-weight: 900;
+            margin: 0 0 40px 0;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        /* 4. VR 전용 사진 판넬 박스 (하늘색 베이스의 큰 프레임) */
+        .vr-display-box {
+            width: 100%;
+            height: 550px; /* VR 화면 크기 설정 */
+            background-color: #b3e5fc; /* 하늘색 기본 베이스 */
+            background-image: url('vr1.jpg'); /* 넣으신 VR 이미지 */
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            
+            /* [효과] 이미지가 양옆으로 부드럽게 움직여 VR 파노라마 느낌을 주는 자동 애니메이션 */
+            animation: panoramaScroll 25s infinite alternate ease-in-out;
+        }
+
+        /* VR 화면 위에 얹어지는 안내 문구 가이드 오버레이 */
+        .vr-overlay {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* 파노라마 자동 스크롤 애니메이션 Keyframes */
+        @keyframes panoramaScroll {
+            0% { background-position: 0% center; }
+            100% { background-position: 100% center; }
+        }
+
+        /* 5. 하단 고정 문의하기 버튼 (메인 디자인과 링크 완벽 매칭) */
+        .fab-button {
+            position: fixed; 
+            bottom: 50px; 
+            right: 60px; 
+            width: 80px; 
+            height: 80px;
+            background-color: #ffffff; 
+            border-radius: 50%; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center; 
+            text-decoration: none; 
+            color: #000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+            z-index: 10; 
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .fab-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* 반응형 모바일 처리 */
+        @media (max-width: 768px) {
+            header { padding: 20px; justify-content: center; }
+            header nav a { margin: 0 10px; font-size: 14px; }
+            .vr-content { margin-top: 100px; }
+            .vr-title { font-size: 32px; }
+            .vr-display-box { height: 350px; }
+            .fab-button { bottom: 30px; right: 30px; width: 70px; height: 70px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-container">
+        <header>
+            <nav>
+                <a href="index.html">홈</a> <a href="#">명소</a>
+                <a href="#">행사안내</a>
+                <a href="#">편의시설</a>
+                <a href="#">공지사항</a>
+                <a href="#">찾아오시는길</a>
+            </nav>
+        </header>
+
+        <main class="vr-content">
+            <div class="vr-subtitle">PANORAMA VIEW</div>
+            <h1 class="vr-title">앞산 풍경 VR 체험</h1>
+
+            <div class="vr-display-box">
+                <div class="vr-overlay">
+                    <span>🔄</span> 앞산공원의 360 파노라마 전경입니다.
+                </div>
+            </div>
+        </main>
+
+        <a href="inquiry.html" class="fab-button">
+            <span style="font-size:26px">🎧</span>
+            <span style="font-size:12px; font-weight:700">문의하기</span>
+        </a>
+    </div>
+
+</body>
+</html>
