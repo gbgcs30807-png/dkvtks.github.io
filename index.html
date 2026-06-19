@@ -98,43 +98,56 @@
         .bt-2 { bottom: 40px; right: 90px; font-size: 28px; transform: rotate(20deg); }
 
 
-        /* ==================== 2번 섹션: 360도 무한 VR 풍경 화면 스타일 ==================== */
+        /* ==================== 2번 섹션: VR 풍경 화면 스타일 ==================== */
+        /* 전체 구역을 흰색 바탕으로 잡고 내부에 컴팩트한 VR 창을 띄우는 형태 */
+        .vr-section-bg {
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .vr-section-bg header {
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .vr-section-bg header nav a { color: #000000; font-weight: 500; }
+        .vr-section-bg header nav a:hover { color: #666666; }
+
+        .vr-main-title {
+            position: absolute; top: 15%; left: 50%; transform: translate(-50%, -50%);
+            text-align: center; color: #333333; width: 100%;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .vr-title { 
+            font-size: 48px; font-weight: 700; margin: 0; letter-spacing: -1px;
+        }
+
+        /* [개선] VR 이미지 창의 세로폭을 줄인 실제 드래그 조작 스크린 영역 */
         .vr-container {
+            width: 100vw;
+            height: 60vh; /* 세로폭을 화면 높이의 60%로 슬림하게 조정 */
+            position: absolute;
+            top: 25vh; /* 상단 타이틀 아래 배치 */
             background-color: #b9d1ea; 
             background-image: url('vr1.jpg');
             background-size: auto 100%; 
             background-position: 0px 50%; 
-            background-repeat: repeat-x; /* 좌우 무한 연속 회전 가능하도록 설정 */
+            background-repeat: repeat-x; /* 좌우 무한 회전 */
             cursor: grab;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
         }
         .vr-container:active {
             cursor: grabbing;
         }
 
-        .vr-container header {
-            background-color: #ffffff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .vr-container header nav a { color: #000000; font-weight: 500; }
-        .vr-container header nav a:hover { color: #666666; }
-
-        .vr-main-title {
-            position: absolute; top: 25%; left: 50%; transform: translate(-50%, -50%);
-            text-align: center; color: #ffffff; width: 100%;
-            z-index: 3;
-            pointer-events: none;
-        }
-        .vr-title { 
-            font-size: 64px; font-weight: 700; margin: 0; letter-spacing: -1px;
-            text-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
-        }
-
         .vr-guide {
-            position: absolute; bottom: 40px; width: 100%; text-align: center;
-            color: #ffffff; font-size: 15px; font-weight: 500; z-index: 3;
-            text-shadow: 0px 2px 8px rgba(0,0,0,0.4);
+            position: absolute; bottom: 5vh; width: 100%; text-align: center;
+            color: #666666; font-size: 14px; font-weight: 500; z-index: 3;
             pointer-events: none;
-            opacity: 0.9;
+            line-height: 1.6;
         }
     </style>
 </head>
@@ -170,7 +183,7 @@
             <div class="butterfly bt-2">🦋</div>
         </div>
 
-        <div class="section vr-container" id="vrSection">
+        <div class="section vr-section-bg">
             <header>
                 <nav>
                     <a href="#" onclick="scrollToSection(0, event)">명소</a>
@@ -180,24 +193,28 @@
                     <a href="#">찾아오시는길</a>
                 </nav>
             </header>
+            
             <div class="vr-main-title">
                 <h1 class="vr-title">앞산 풍경</h1>
             </div>
+
+            <div class="vr-container" id="vrSection"></div>
+
             <div class="vr-guide">
-                마우스 좌우/상하 드래그: 360도 자유 시점 탐색<br>
-                마우스 휠 굴리기: 확대 / 축소 (최소 축소 시 메인 페이지로 복귀)
+                슬림해진 VR 화면을 마우스로 상하좌우 클릭-드래그하여 360도 자유롭게 감상해 보세요.<br>
+                마우스 휠을 굴려 확대/축소할 수 있으며, 최소 축소 상태에서 위로 스크롤하면 메인으로 돌아갑니다.
             </div>
         </div>
 
     </div>
 
     <script>
-        let currentIdx = 0; // 0: 메인화면, 1: VR화면
+        let currentIdx = 0; 
         const wrapper = document.getElementById('mainWrapper');
         const vrSection = document.getElementById('vrSection');
         let isTransitioning = false;
 
-        // ==================== [수정] 네비게이션 및 스크롤 작동 ====================
+        // ==================== 네비게이션 및 스크롤 작동 (기존 구조 보존) ====================
         function scrollToSection(idx, e) {
             if (e) e.preventDefault();
             currentIdx = idx;
@@ -207,24 +224,21 @@
             setTimeout(() => { isTransitioning = false; }, 600);
         }
 
-        // 마우스 휠 감지로 화면 전환 처리
+        // 마우스 휠 감지로 화면 전환 및 줌인아웃 처리
         window.addEventListener('wheel', (e) => {
             if (isTransitioning) return;
 
             if (currentIdx === 0 && e.deltaY > 0) {
-                // 메인에서 아래로 스크롤 시 VR로 이동
                 scrollToSection(1);
             } 
             else if (currentIdx === 1) {
-                // VR 영역 내부 조작 (줌인/줌아웃 연산)
                 if (e.deltaY > 0) {
                     bgSize += 10;
-                    if (bgSize > 400) bgSize = 400; // 최대 확대 400%
+                    if (bgSize > 400) bgSize = 400; 
                 } else {
                     bgSize -= 10;
                     if (bgSize <= 100) {
                         bgSize = 100;
-                        // 이미 최소 크기(100%)인데 위로 스크롤을 시도하면 메인으로 자연스럽게 전환
                         scrollToSection(0);
                         return;
                     }
@@ -234,16 +248,16 @@
         }, { passive: true });
 
 
-        // ==================== VR 360도 무한 드래그 & 줌 데이터 ====================
+        // ==================== 360도 무한 드래그 & 줌 스크립트 ====================
         let isDragging = false;
         let startX = 0, startY = 0;
         
-        let bgSize = 100;     // 기본 배율
-        let bgPosX = 0;       // X축 픽셀 무한 좌표
-        let bgPosY = 50;      // Y축 상하 제한 비율 (%)
-        const dragSpeed = 0.6; // 드래그 회전 속도
+        let bgSize = 100;     
+        let bgPosX = 0;       // 픽셀 단위 연산으로 좌우 무한 360도 롤링 구현
+        let bgPosY = 50;      
+        const dragSpeed = 0.7; // 360도 회전 회전감 민감도
 
-        // 마우스 누를 때
+        // VR 컨테이너 위에서 마우스를 누를 때만 회전 작동 시작
         vrSection.addEventListener('mousedown', (e) => {
             if (currentIdx !== 1) return;
             isDragging = true;
@@ -251,7 +265,6 @@
             startY = e.clientY;
         });
 
-        // 마우스 움직일 때
         window.addEventListener('mousemove', (e) => {
             if (!isDragging || currentIdx !== 1) return;
             
@@ -260,24 +273,23 @@
             startX = e.clientX;
             startY = e.clientY;
 
-            // X축: 마우스 이동량을 픽셀 단위로 계속 축적시켜 360도 무한 회전 구현
+            // X축 드래그: 끝없이 누적되는 픽셀 좌표값으로 벽 없이 무한 360도 회전
             bgPosX = bgPosX + (moveX * dragSpeed);
 
-            // Y축: 상하 시점 이동은 하늘과 땅 끝(0% ~ 100%)에 걸치도록 보정
+            // Y축 드래그: 창 크기에 맞춰 상하 끝단 바운더리(0% ~ 100%) 고정
             const speedAdjustY = 100 / bgSize; 
-            bgPosY = bgPosY - (moveY * 0.1 * speedAdjustY);
+            bgPosY = bgPosY - (moveY * 0.12 * speedAdjustY);
             if (bgPosY < 0) bgPosY = 0; 
             if (bgPosY > 100) bgPosY = 100;
 
             updateVRStyle();
         });
 
-        // 드래그 종료
         window.addEventListener('mouseup', () => { isDragging = false; });
         window.addEventListener('mouseleave', () => { isDragging = false; });
 
 
-        // ==================== 모바일 터치 (360도 드래그 & 핀치 줌) ====================
+        // ==================== 모바일 터치 (360도 무한 팬 & 핀치 줌) ====================
         let touchDist = 0;
         let initialTouchY = 0;
 
@@ -287,24 +299,27 @@
                 return;
             }
             
-            if (e.touches.length === 1) {
-                isDragging = true;
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-                initialTouchY = e.touches[0].clientY;
-            } else if (e.touches.length === 2) {
-                isDragging = false;
-                touchDist = Math.hypot(
-                    e.touches[0].clientX - e.touches[1].clientX,
-                    e.touches[0].clientY - e.touches[1].clientY
-                );
+            // 터치 시작 위치가 VR 컨테이너 내부일 때만 작동하도록 타겟팅
+            if (e.target === vrSection) {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    initialTouchY = e.touches[0].clientY;
+                } else if (e.touches.length === 2) {
+                    isDragging = false;
+                    touchDist = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                }
             }
         }, { passive: true });
 
         window.addEventListener('touchmove', (e) => {
-            if (currentIdx !== 1) return;
+            if (currentIdx !== 1 || !isDragging) return;
 
-            if (e.touches.length === 1 && isDragging) {
+            if (e.touches.length === 1) {
                 const moveX = e.touches[0].clientX - startX;
                 const moveY = e.touches[0].clientY - startY;
                 startX = e.touches[0].clientX;
@@ -313,7 +328,7 @@
                 bgPosX = bgPosX + (moveX * dragSpeed);
 
                 const speedAdjustY = 100 / bgSize; 
-                bgPosY = bgPosY - (moveY * 0.1 * speedAdjustY);
+                bgPosY = bgPosY - (moveY * 0.12 * speedAdjustY);
                 if (bgPosY < 0) bgPosY = 0; if (bgPosY > 100) bgPosY = 100;
                 
                 updateVRStyle();
@@ -341,7 +356,6 @@
             if (isTransitioning) return;
             let touchEndY = e.changedTouches[0].clientY;
 
-            // 모바일 터치 스와이프로 위/아래 전환
             if (currentIdx === 0 && initialTouchY - touchEndY > 60) {
                 scrollToSection(1);
             } else if (currentIdx === 1 && bgSize === 100 && touchEndY - initialTouchY > 60) {
@@ -349,7 +363,7 @@
             }
         }, { passive: true });
 
-        // 화면 렌더링 동적 반영 함수
+        // 실시간 뷰포트 드래그 변환 엔진
         function updateVRStyle() {
             vrSection.style.backgroundSize = `auto ${bgSize}%`;
             vrSection.style.backgroundPosition = `${bgPosX}px ${bgPosY}%`;
